@@ -3,11 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sweet Seventeen — Titi</title>
+<!-- Paksa tema terang: cegah browser HP menggelapkan halaman -->
+<meta name="color-scheme" content="light only">
+<meta name="supported-color-schemes" content="light">
+<link rel="icon" type="image/png" href="Chibi.png">
+<title>Tritiana Birthday Invitation</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
 <style>
   :root{
+    color-scheme: only light;
     --sky:#eef8ff;
     --sky-deep:#cbe8fb;
     --blue:#8fc3ee;
@@ -23,6 +28,13 @@
     --shadow-sm: 0 10px 24px -12px rgba(51,99,143,0.35);
   }
   *{box-sizing:border-box; margin:0; padding:0;}
+
+  /* Anti dark-mode: tetap terang walau browser/HP pakai tema gelap */
+  html, body, #cover, .cover-card, .bunny-cover, #openBtn, img{
+    color-scheme: only light;
+    forced-color-adjust: none;
+  }
+
   html{scroll-behavior:smooth;}
   /* Kunci scroll sampai tombol Open Invitation dipencet */
   html.locked, html.locked body{ overflow:hidden; height:100%; }
@@ -50,8 +62,8 @@
     to{ transform: translateX(calc(100vw + 140px));}
   }
   @keyframes bob{
-    0%,100%{ transform: translateY(0) rotate(-1deg);}
-    50%{ transform: translateY(-16px) rotate(1deg);}
+    0%,100%{ transform: translateY(0) rotate(-.6deg);}
+    50%{ transform: translateY(-8px) rotate(.6deg);}
   }
   @keyframes twinkle{
     0%,100%{ opacity:0; transform:scale(.6);}
@@ -68,7 +80,7 @@
     width:100%; max-width:620px; margin:0 auto;   /* kolom tengah, selebar halaman utama */
     display:flex; flex-direction:column; align-items:center; justify-content:center;
     background: #ffffff;
-    text-align:center; padding:24px;
+    text-align:center; padding:24px 16px;
     transition: transform 1s cubic-bezier(.65,0,.15,1), opacity .8s ease;
   }
   #cover.hide{ transform: translateY(-100%); opacity:0; pointer-events:none;}
@@ -79,10 +91,15 @@
   #cover::after{ width:220px; height:220px; bottom:-100px; right:-60px; }
 
   .cover-card{
-    position:relative; z-index:2; display:flex; flex-direction:column; align-items:center;
+    position:relative; z-index:2;
+    /* Rasio tetap 9:16. Tinggi = yang terkecil dari: tinggi layar, lebar layar (diproporsikan), atau 720px.
+       Jadi di HP maupun laptop, seluruh kartu + tombol SELALU kelihatan tanpa terpotong. */
+    aspect-ratio: 9 / 16;
+    height: calc(100vh - 48px);
+    height: min(calc(100dvh - 48px), calc((100vw - 32px) * 16 / 9), 720px);
     background: linear-gradient(180deg, #ffd9e8 0%, #f3dcf0 35%, #d8e4f7 70%, #cfe3f9 100%);
     border:1px solid rgba(255,255,255,.7);
-    padding:0; border-radius:32px; max-width:400px; width:100%;
+    padding:0; border-radius:32px;
     overflow:hidden;
     box-shadow: 0 30px 60px -20px rgba(20,50,80,.5);
     animation: bob 4.5s ease-in-out infinite;
@@ -108,38 +125,39 @@
   }
   .cover-sub{ margin-top:10px; font-size:1.15rem; color:var(--blue-deep); font-weight:600; font-family:'Fredoka';}
 
-  /* Bunny + button dijadikan satu */
+  /* Gambar mengisi kartu penuh; tombol ditaruh di bawah dengan ukuran proporsional */
   .bunny-wrap{
-    position:relative;
-    width:104%;
-    margin:0;
+    position:absolute; inset:0;
+    container-type:inline-size;   /* satuan cqw = lebar kartu */
   }
   .bunny-cover{
-  width:100%;
-  height:auto;
-  display:block;
-  margin:0 auto;      /* ← tambahkan ini */
-  animation:none;
-}
+    position:absolute; inset:0;
+    width:100%; height:105%;
+    object-fit:cover; object-position:50% 50%;
+    display:block; animation:none;
+  }
   #openBtn{
     position:absolute;
-    left:0; right:0;
-    bottom:12%;           /* atur naik/turun tombol di sini (mis. -20px biar nempel di tepi bawah) */
-    margin:0 auto;
-    width:max-content;
+    left:50%; bottom:9%;
+    transform:translateX(-50%);
+    width:max-content; max-width:88%;
     cursor:pointer;
-    background: #c4e8ff;
-    border: 3px solid #fff3c4;
-    color:var(--blue-deep); font-family:'Fredoka', sans-serif; font-weight:700; font-size:1rem;
-    padding:16px 36px; border-radius:999px;
-    box-shadow: 0 6px 0 #5a97cf, 0 12px 20px -8px rgba(10,30,50,.3);
-    display:flex; align-items:center; gap:10px;
+    background:#c4e8ff;
+    border:.2em solid #fff3c4;
+    color:var(--blue-deep); font-family:'Fredoka', sans-serif; font-weight:700;
+    font-size:clamp(14px, 4.8cqw, 20px);
+    padding:.9em 1.9em; border-radius:999px;
+    box-shadow: 0 .38em 0 #5a97cf, 0 .8em 1.3em -.5em rgba(10,30,50,.3);
+    display:flex; align-items:center; justify-content:center; gap:.5em;
+    white-space:nowrap;
+    min-height:48px;              /* area tap nyaman di HP */
+    -webkit-tap-highlight-color:transparent;
     transition: transform .15s ease, box-shadow .15s ease;
   }
-  #openBtn:hover{ transform: translateY(-2px); }
+  #openBtn:hover{ transform:translateX(-50%) translateY(-2px); }
   #openBtn:active{
-    transform: translateY(4px);
-    box-shadow: 0 2px 0 #5a97cf, 0 4px 10px -6px rgba(10,30,50,.3);
+    transform:translateX(-50%) translateY(.3em);
+    box-shadow: 0 .1em 0 #5a97cf, 0 .25em .6em -.3em rgba(10,30,50,.3);
   }
 
   /* ---------- Reveal on scroll ---------- */
@@ -244,7 +262,6 @@
   .detail-title{ font-family:'Fredoka'; font-size:.76rem; text-transform:uppercase; letter-spacing:.09em; color:var(--blue-mid);}
   .detail-value{ font-size:1.02rem; margin-top:3px; font-weight:700; color:var(--ink);}
   .detail-sub{ font-size:.85rem; color:#8aa2b4; margin-top:2px;}
-  .parents-line{ margin-top:22px; font-size:1rem; color:var(--blue-deep); font-family:'Caveat'; font-weight:600; text-align:center; position:relative; z-index:1;}
   .maps-btn{
     display:inline-flex; align-items:center; gap:8px; margin-top:20px;
     background:linear-gradient(135deg, var(--blue-deep), var(--blue-mid)); color:#fff; text-decoration:none; font-weight:600;
@@ -252,7 +269,7 @@
     font-family:'Fredoka';
   }
   .dresscode-chip{
-    display:inline-block; margin-top:18px; background:linear-gradient(135deg,var(--blush), #ffeaf3); color:var(--blush-deep);
+    display:inline-block; margin-top:18px; background:linear-gradient(135deg,var(--blush), #ffeaf3); color:#66789a;
     padding:9px 22px; border-radius:999px; font-size:.85rem; font-weight:700; box-shadow: var(--shadow-sm);
   }
   .card-actions{ text-align:center; position:relative; z-index:1; }
@@ -286,6 +303,22 @@
   .submit-btn:hover{ transform: translateY(-2px); }
   .rsvp-msg{ margin-top:16px; text-align:center; font-size:.88rem; font-weight:700; color:var(--blue-deep); display:none;
     background:var(--sky); border-radius:14px; padding:12px; }
+
+  /* Form terkunci setelah diisi */
+  .submit-btn:disabled, .wish-form button:disabled{ opacity:.6; cursor:not-allowed; }
+  .submit-btn:disabled:hover{ transform:none; }
+  .field input:disabled, .field select:disabled, .wish-fields input:disabled,
+  .choice-group button:disabled{ opacity:.65; cursor:not-allowed; }
+
+  .rsvp-note{
+    max-width:460px;
+    margin:22px auto 0;
+    padding:0 6px;
+    text-align:center;
+    font-size:.86rem;
+    line-height:1.8;
+    color:#5c7488;
+  }
 
   /* Wishes */
   .wish-fields{ display:flex; flex-direction:column; gap:10px; margin-top:8px; }
@@ -344,6 +377,12 @@
     .count-box{ width:88px; }
   }
 
+  /* Player YouTube tersembunyi (hanya suaranya yang dipakai) */
+  .yt-hidden{
+    position:fixed; left:-9999px; top:0; width:200px; height:200px;
+    opacity:0; pointer-events:none; overflow:hidden;
+  }
+
   .music-btn{
     position:fixed; top:18px; right:18px; z-index:60; width:46px; height:46px; border-radius:50%;
     border:none; cursor:pointer; background:rgba(255,255,255,.85); backdrop-filter: blur(6px);
@@ -359,12 +398,21 @@
     .reveal{ opacity:1; transform:none; transition:none; }
   }
 
-  /* Biar card cover selalu muat di layar (laptop pendek).
-     0.75 = perkiraan rasio lebar/tinggi 2.png; sesuaikan kalau perlu. */
- .cover-card{ max-width:min(340px, calc((100dvh - 48px) * 0.64)); }
-@media (min-width:900px){
-  .cover-card{ max-width:min(390px, calc((100dvh - 48px) * 0.64)); }
-}
+
+  /* Pastikan tetap terang walau mode gelap aktif */
+  @media (prefers-color-scheme: dark){
+    :root{ color-scheme: only light; }
+    body{ color:var(--ink); }
+    body{
+      background:
+        radial-gradient(ellipse 900px 500px at 15% 0%, #dcf0fd 0%, transparent 60%),
+        radial-gradient(ellipse 900px 500px at 85% 15%, #e8f6ff 0%, transparent 55%),
+        linear-gradient(180deg, var(--sky) 0%, #f8fcff 30%, #ffffff 60%, var(--sky) 100%);
+    }
+    #cover{ background:#ffffff; }
+    #openBtn{ background:#c4e8ff; color:var(--blue-deep); border-color:#fff3c4; }
+    img{ filter:none !important; }
+  }
 
 </style>
 </head>
@@ -373,6 +421,7 @@
 <div class="cloud-layer" id="cloudLayer"></div>
 
 <button class="music-btn" id="musicToggle" aria-label="Toggle music">🔇</button>
+<div class="yt-hidden" aria-hidden="true"><div id="ytPlayer"></div></div>
 
 <!-- COVER -->
 <section id="cover">
@@ -387,7 +436,7 @@
 <main>
   <!-- HERO -->
   <section id="hero" class="reveal">
-    <div class="eyebrow">Birthday Celebration</div>
+    <div class="eyebrow">17TH BIRTHDAY CELEBRATION</div>
     <div class="frame-wrap">
       <div class="frame">
         <div class="frame-inner">
@@ -395,17 +444,16 @@
         </div>
       </div>
       <span class="frame-deco fd1">✨️</span>
-      <span class="frame-deco fd2">🌻</span>
+      <span class="frame-deco fd2">⭐️</span>
     </div>
     <h2 class="hero-name">Tritiana</h2>
     <div class="hero-age"> 17 years old</div>
     <p class="hero-msg">
-      On this day, I shine so bright,<br>
-      Another year, a joyful flight.<br>
-      I celebrate the me I've become,<br>
-      Happy birthday to me, under the sun's warm sum.
+      ✨ Finally, the day has come! 🎀 <br>
+      I’m so excited to celebrate my Sweet Seventeen, <br>
+      and of course, I really want to celebrate this special moment with all of you!
     </p>
-    <p class="hero-caption">🌻 For my special day 🩷</p>
+    <p class="hero-caption">💫 For my special day 🩷</p>
   </section>
 
   <svg class="wave-divider reveal" viewBox="0 0 400 30" preserveAspectRatio="none"><path d="M0 15 Q 50 30 100 15 T 200 15 T 300 15 T 400 15" stroke="#cbe8fb" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
@@ -419,7 +467,9 @@
       <div class="count-box"><div class="count-num" id="cd-min">00</div><div class="count-label">Minutes</div></div>
       <div class="count-box"><div class="count-num" id="cd-sec">00</div><div class="count-label">Seconds</div></div>
     </div>
-    <p class="count-caption">🎀 See you very soon ⭐️</p>
+    <p class="count-caption">Kehadiran kalian would mean so much to me and tentunya akan membuat hari ulang tahunku jadi lebih special.
+      So, jangan lupa datang and let’s make some unforgettable memories together! <br>
+      🥳💐</p>
   </section>
 
   <svg class="wave-divider reveal" viewBox="0 0 400 30" preserveAspectRatio="none"><path d="M0 15 Q 50 30 100 15 T 200 15 T 300 15 T 400 15" stroke="#cbe8fb" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
@@ -449,7 +499,6 @@
           <div class="detail-value">Warung Nek Ade</div>
         </div>
       </div>
-      <div class="parents-line">The beloved daughter</div>
       <div class="card-actions">
         <span class="dresscode-chip">🤍 Dresscode: White</span><br>
         <a class="maps-btn" href="https://share.google/xvYl9LW7ehgs3WhWR" target="_blank" rel="noopener">📍 View Location</a>
@@ -463,7 +512,7 @@
   <section id="rsvp" class="reveal">
     <div class="eyebrow">RSVP</div>
     <p style="margin-top:10px; font-size:.9rem; color:#5c7488;">
-      Please kindly confirm your attendance, thank you! ⭐️
+      To make sure everything is well prepared for my special day, please kindly confirm your attendance, thank you! 🤍
     </p>
     <div class="rsvp-card">
       <div class="field">
@@ -488,6 +537,15 @@
       <button class="submit-btn" id="rsvpSubmit">Send RSVP</button>
       <div class="rsvp-msg" id="rsvpMsg"></div>
     </div>
+
+    <p class="rsvp-note">
+      <br>
+      Buat yang bisa hadir maupun yang berhalangan hadir, tetap mohon mengisi RSVP-nya,
+      karena your response will help us prepare the party and make sure everything is
+      ready for everyone✨ <br>
+      <br>
+      ☁️Thank you so much for taking the time to fill it out!🤍
+    </p>
   </section>
 
   <svg class="wave-divider reveal" viewBox="0 0 400 30" preserveAspectRatio="none"><path d="M0 15 Q 50 30 100 15 T 200 15 T 300 15 T 400 15" stroke="#cbe8fb" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
@@ -512,8 +570,9 @@
 
 <footer>
   <img class="fbunny" src="Chibi.png" alt="Titi">
-  <div class="thanks">Thank You 🩵</div>
-  <p>See you on my happy day</p>
+  <div class="thanks"> Thank You </div>
+  <p>Can’t wait to celebrate my Sweet Seventeen with you guyss! <br>
+    🎀See u there!🩷</p>
   <div class="sign">— Tritiana</div>
 </footer>
 
@@ -604,17 +663,72 @@
     }, (total + 1.2) * 1000);
   }
 
+  // ---------- Musik dari YouTube (https://youtu.be/yEGxCuVYJ6M) ----------
+  // Ganti ID ini kalau mau lagu lain (ID = bagian setelah youtu.be/ sebelum tanda ?)
+  const YT_VIDEO_ID = 'yEGxCuVYJ6M';
+  const YT_START = 20;   // detik mulai (0:20)
+  const YT_END   = 50;   // detik selesai (0:50), lalu loop balik ke YT_START
+  let ytPlayer = null, ytReady = false, ytFailed = false, ytLoopTimer = null;
+
+  function ytWatchLoop(){
+    if(ytLoopTimer) return;
+    ytLoopTimer = setInterval(() => {
+      if(!ytReady) return;
+      const t = ytPlayer.getCurrentTime();
+      if(t >= YT_END - 0.3 || t < YT_START - 1){ ytPlayer.seekTo(YT_START, true); }
+    }, 250);
+  }
+  function ytStopWatch(){
+    if(ytLoopTimer){ clearInterval(ytLoopTimer); ytLoopTimer = null; }
+  }
+
+  window.onYouTubeIframeAPIReady = function(){
+    const vars = { playsinline:1, controls:0, disablekb:1, fs:0, rel:0, modestbranding:1, start:YT_START };
+    if(location.origin.startsWith('http')) vars.origin = location.origin;
+    ytPlayer = new YT.Player('ytPlayer', {
+      width:'200', height:'200', videoId: YT_VIDEO_ID, playerVars: vars,
+      events:{
+        onReady: () => {
+          ytReady = true;
+          ytPlayer.setVolume(80);
+          if(musicOn) ytPlayer.playVideo();   // tamu sudah menekan Open sebelum player siap
+        },
+        onStateChange: (e) => {
+          if(e.data === YT.PlayerState.PLAYING){ ytWatchLoop(); }
+          else if(e.data === YT.PlayerState.PAUSED){ ytStopWatch(); }
+          // kalau video sampai habis, ulang lagi dari detik mulai
+          if(e.data === YT.PlayerState.ENDED){ ytPlayer.seekTo(YT_START, true); ytPlayer.playVideo(); }
+        },
+        onError: () => {
+          // video tidak bisa diputar (mis. embed dimatikan): pakai melodi Happy Birthday sebagai cadangan
+          ytFailed = true;
+          if(musicOn) scheduleMelody();
+        }
+      }
+    });
+  };
+  (function loadYouTubeApi(){
+    const tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    tag.onerror = () => { ytFailed = true; };
+    document.head.appendChild(tag);
+  })();
+
   function startMusic(){
     musicOn = true;
     musicBtn.textContent = '🔊';
     musicBtn.classList.add('spin');
-    scheduleMelody();
+    if(ytFailed){ scheduleMelody(); return; }
+    if(ytReady){ ytPlayer.playVideo(); }
+    // kalau player belum siap, onReady yang akan memutarnya
   }
 
   function stopMusic(){
     musicOn = false;
     musicBtn.textContent = '🔇';
     musicBtn.classList.remove('spin');
+    if(ytReady){ ytPlayer.pauseVideo(); }
+    ytStopWatch();
     if(musicTimeoutId){ clearTimeout(musicTimeoutId); musicTimeoutId = null; }
     // Close the whole audio context so any already-scheduled notes stop immediately,
     // instead of letting them finish playing out.
@@ -697,8 +811,42 @@
     });
   });
 
+  // ---------- Nama yang sudah RSVP dari perangkat ini (cadangan kalau pengecekan sheet telat/gagal) ----------
+  const normName = str => str.toLowerCase().replace(/\s+/g, ' ').trim();
+  function getSentNames(){
+    try{ return JSON.parse(localStorage.getItem('tritiana_rsvp_names') || '[]'); }catch(e){ return []; }
+  }
+  // Buka undangan dengan ?reset=1 di belakang link untuk menghapus daftar nama tes di perangkat ini
+  if(params.get('reset') === '1'){
+    try{ localStorage.removeItem('tritiana_rsvp_names'); }catch(e){}
+  }
+  function addSentName(name){
+    try{
+      const list = getSentNames();
+      list.push(normName(name));
+      localStorage.setItem('tritiana_rsvp_names', JSON.stringify(list));
+    }catch(e){}
+  }
+
   // RSVP submit
-  document.getElementById('rsvpSubmit').addEventListener('click', ()=>{
+  // Cek ke Google Sheet: kalau nama sudah pernah RSVP (baris tanpa ucapan), kirim ditolak
+  async function rsvpAlreadyRegistered(name){
+    if(!CONFIG.sheetUrl) return false;
+    try{
+      const url = CONFIG.sheetUrl + (CONFIG.sheetUrl.includes('?') ? '&' : '?') + 't=' + Date.now();
+      const res = await fetch(url);
+      const rows = await res.json();
+      const target = normName(name);
+      return Array.isArray(rows) && rows.some(r => r && !r.message && normName(String(r.name || '')) === target);
+    }catch(err){
+      console.warn('Could not check existing RSVPs:', err);
+      return false; // kalau gagal cek (mis. sinyal jelek), tamu tetap boleh RSVP
+    }
+  }
+
+  document.getElementById('rsvpSubmit').addEventListener('click', async ()=>{
+    const btn = document.getElementById('rsvpSubmit');
+    if(btn.dataset.busy) return;
     const name = document.getElementById('rsvpName').value.trim();
     const msgEl = document.getElementById('rsvpMsg');
     if(!name){
@@ -707,6 +855,24 @@
       msgEl.textContent = "Don't forget to enter your name 🤍";
       return;
     }
+
+    // Cek duplikat nama dulu
+    btn.dataset.busy = '1';
+    btn.disabled = true;
+    const oldText = btn.textContent;
+    btn.textContent = 'Checking...';
+    const exists = getSentNames().includes(normName(name)) || await rsvpAlreadyRegistered(name);
+    btn.disabled = false;
+    btn.textContent = oldText;
+    delete btn.dataset.busy;
+
+    if(exists){
+      msgEl.style.display='block';
+      msgEl.style.color = '#c0526b';
+      msgEl.textContent = `"${name}" has already RSVP'd 🤍 If you're a different person with the same name, please add your last name.`;
+      return;
+    }
+
     const attend = document.querySelector('.attend-btn.active').dataset.val;
     const guests = document.getElementById('rsvpGuests').value;
     msgEl.style.display='block';
@@ -721,6 +887,10 @@
       guests: attend === 'yes' ? guests : '',
       message: ''
     });
+
+    // Form tetap terbuka: tamu lain / nama lain boleh RSVP lagi, nama yang sama ditolak
+    addSentName(name);
+    document.getElementById('rsvpName').value = '';
   });
 
   // Wishes — pulled from and sent to the shared Google Sheet so every visitor sees the same wall
@@ -777,6 +947,7 @@
       guests: '',
       message: val
     });
+
   }
 
   // Scroll reveal
